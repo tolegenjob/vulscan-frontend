@@ -4,8 +4,8 @@ import { RequireRole } from './auth/RequireRole'
 import { Layout } from './components/Layout'
 import { NotFoundPage } from './components/NotFoundPage'
 import { LoginPage } from './features/auth/LoginPage'
-import { Typography } from '@mui/material'
 import { TargetDetailPage } from './features/targets/TargetDetailPage'
+import { AuditPage } from './features/audit/AuditPage'
 import { DashboardPage } from './features/dashboard/DashboardPage'
 import { FindingDetailPage } from './features/findings/FindingDetailPage'
 import { FindingsPage } from './features/findings/FindingsPage'
@@ -13,10 +13,6 @@ import { NewScanPage } from './features/scans/NewScanPage'
 import { ScanDetailPage } from './features/scans/ScanDetailPage'
 import { ScansPage } from './features/scans/ScansPage'
 import { TargetsPage } from './features/targets/TargetsPage'
-
-function Placeholder({ title }: { title: string }) {
-  return <Typography variant="h5">{title}</Typography>
-}
 
 export function AppRoutes() {
   return (
@@ -33,7 +29,7 @@ export function AppRoutes() {
           <Route path="scans/:id" element={<ScanDetailPage />} />
           <Route path="targets/:id" element={<TargetDetailPage />} />
           <Route element={<RequireRole role="ADMIN" />}>
-            <Route path="audit" element={<Placeholder title="Аудит" />} />
+            <Route path="audit" element={<AuditPage />} />
           </Route>
           <Route path="*" element={<NotFoundPage />} />
         </Route>
