@@ -1,7 +1,7 @@
 import { Alert, Box, Button, Chip, CircularProgress, Paper, Stack, Tab, Tabs, Typography } from '@mui/material'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom'
 import { targetsApi } from '../../api/endpoints/targets'
 import { describeError, isApiError } from '../../api/errors'
 import type { Target } from '../../api/types'
@@ -110,6 +110,9 @@ export function TargetDetailPage() {
         </Box>
         <Stack direction="row" spacing={1} alignItems="center">
           <Chip label={targetStatusLabel[target.status]} color={targetStatusColor[target.status]} />
+          {target.status === 'VERIFIED' && (
+            <Button variant="contained" component={RouterLink} to={`/scans/new?targetId=${target.id}`}>Сканировать</Button>
+          )}
           <Button color="error" onClick={() => setConfirmDelete(true)}>Удалить</Button>
         </Stack>
       </Stack>

@@ -6,6 +6,9 @@ import { NotFoundPage } from './components/NotFoundPage'
 import { LoginPage } from './features/auth/LoginPage'
 import { Typography } from '@mui/material'
 import { TargetDetailPage } from './features/targets/TargetDetailPage'
+import { NewScanPage } from './features/scans/NewScanPage'
+import { ScanDetailPage } from './features/scans/ScanDetailPage'
+import { ScansPage } from './features/scans/ScansPage'
 import { TargetsPage } from './features/targets/TargetsPage'
 
 function Placeholder({ title }: { title: string }) {
@@ -20,6 +23,9 @@ export function AppRoutes() {
         <Route element={<Layout />}>
           <Route index element={<Placeholder title="Обзор" />} />
           <Route path="targets" element={<TargetsPage />} />
+          <Route path="scans" element={<ScansPage />} />
+          <Route path="scans/new" element={<NewScanPage />} />
+          <Route path="scans/:id" element={<ScanDetailPage />} />
           <Route path="targets/:id" element={<TargetDetailPage />} />
           <Route element={<RequireRole role="ADMIN" />}>
             <Route path="audit" element={<Placeholder title="Аудит" />} />

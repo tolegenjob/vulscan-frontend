@@ -183,7 +183,7 @@ export interface CreateScanInput {
   policyId?: string
   modules: ModuleType[]
   endpointIds: string[]
-  xss?: { reflected?: boolean; stored?: boolean }
+  xss?: { reflected?: boolean; stored?: boolean; allowStore?: boolean }
   sqli?: { errorBased?: boolean; booleanBased?: boolean; timeBased?: boolean }
   idor?: { identityIds: string[] }
   excludePrefixes?: string[]
