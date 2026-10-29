@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { Route, Routes } from 'react-router-dom'
@@ -30,8 +30,8 @@ describe('ScanDetailPage', () => {
       }),
     )
     renderPage()
-    expect(await screen.findByText('Выполняется', { selector: '.MuiChip-label' })).toBeInTheDocument()
-    expect(await screen.findByText('Завершено', { selector: '.MuiChip-label' }, { timeout: 5000 })).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByTestId('scan-status')).toHaveTextContent('Выполняется'))
+    await waitFor(() => expect(screen.getByTestId('scan-status')).toHaveTextContent('Завершено'), { timeout: 5000 })
     const afterDone = calls
     await new Promise((r) => setTimeout(r, 2600))
     expect(calls).toBe(afterDone)
@@ -80,7 +80,7 @@ describe('ScanDetailPage', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Отменить' }))
     expect(cancelled).toBe(false)
     await userEvent.click(await screen.findByRole('button', { name: 'Отменить сканирование' }))
-    expect(await screen.findByText('Отменяется', { selector: '.MuiChip-label' })).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByTestId('scan-status')).toHaveTextContent('Отменяется'))
     expect(cancelled).toBe(true)
     expect(screen.queryByRole('button', { name: 'Отменить' })).not.toBeInTheDocument()
   })

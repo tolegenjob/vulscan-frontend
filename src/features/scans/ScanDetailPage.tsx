@@ -92,7 +92,7 @@ export function ScanDetailPage() {
           </Typography>
         </Box>
         <Stack direction="row" spacing={1} alignItems="center">
-          <Chip label={scanStatusLabel[scan.status]} color={scanStatusColor[scan.status]} />
+          <Chip label={scanStatusLabel[scan.status]} color={scanStatusColor[scan.status]} data-testid="scan-status" />
           {active && scan.status !== 'CANCELLING' && (
             <Button color="warning" onClick={() => setConfirmCancel(true)}>Отменить</Button>
           )}

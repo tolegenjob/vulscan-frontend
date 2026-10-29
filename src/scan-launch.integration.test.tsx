@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { describe, expect, it } from 'vitest'
@@ -44,8 +44,8 @@ describe('scan launch flow', () => {
     await userEvent.click(screen.getByRole('checkbox', { name: /Я подтверждаю/ }))
     await userEvent.click(screen.getByRole('button', { name: 'Запустить сканирование' }))
 
-    expect(await screen.findByText('Выполняется', { selector: '.MuiChip-label' })).toBeInTheDocument()
-    expect(await screen.findByText('Завершено', { selector: '.MuiChip-label' }, { timeout: 6000 })).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByTestId('scan-status')).toHaveTextContent('Выполняется'))
+    await waitFor(() => expect(screen.getByTestId('scan-status')).toHaveTextContent('Завершено'), { timeout: 6000 })
     expect(screen.getByRole('link', { name: /Все находки этого сканирования/ })).toHaveAttribute('href', '/findings?scanId=s1')
   }, 20000)
 })
