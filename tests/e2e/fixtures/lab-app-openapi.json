@@ -1,0 +1,46 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "lab-app (подмножество для E-3)", "version": "1.0.0" },
+  "paths": {
+    "/xss/reflect-text": {
+      "get": {
+        "parameters": [
+          { "name": "q", "in": "query", "schema": { "type": "string", "example": "e2e-probe" } }
+        ],
+        "responses": { "200": { "description": "ok" } }
+      }
+    },
+    "/sqli/error/products": {
+      "get": {
+        "parameters": [
+          { "name": "id", "in": "query", "schema": { "type": "string", "example": "1" } }
+        ],
+        "responses": { "200": { "description": "ok" } }
+      }
+    },
+    "/sqli/boolean/search": {
+      "get": {
+        "parameters": [
+          { "name": "name", "in": "query", "schema": { "type": "string", "example": "Keyboard Lab 100" } }
+        ],
+        "responses": { "200": { "description": "ok" } }
+      }
+    },
+    "/api/orders/{id}": {
+      "get": {
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "example": "1001" } }
+        ],
+        "responses": { "200": { "description": "ok" } }
+      }
+    },
+    "/api/documents/{id}": {
+      "get": {
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "string", "example": "2001" } }
+        ],
+        "responses": { "200": { "description": "ok" } }
+      }
+    }
+  }
+}

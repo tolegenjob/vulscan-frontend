@@ -19,6 +19,10 @@ jobs:
           node-version: 22
       - name: Install
         shell: bash
+        env:
+          # @playwright/test (devDependency, E-3) иначе тянет бинарники браузеров при каждом
+          # npm install — CI эти тесты не запускает (им нужен живой стенд, см. tests/e2e/README.md).
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
         run: npm install --no-audit --no-fund 2>&1 | tee build.log
       - name: Lint
         shell: bash
