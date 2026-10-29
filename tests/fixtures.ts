@@ -69,3 +69,51 @@ export const policy = (over: Partial<Policy> = {}): Policy => ({
   limits: { maxRequests: 2000, requestsPerSecond: 5, maxConcurrency: 2, httpTimeoutMs: 10000, maxResponseBytes: 1048576, maxDurationSec: 900 },
   ...over,
 })
+
+import type { DashboardSummary, FindingDetail, FindingListItem } from '../src/api/types'
+
+export const findingItem = (over: Partial<FindingListItem> = {}): FindingListItem => ({
+  id: 'f1',
+  scanId: 's1',
+  targetId: 't1',
+  moduleType: 'XSS',
+  vulnType: 'XSS_REFLECTED',
+  verdict: 'CONFIRMED',
+  severity: 'HIGH',
+  confidence: 90,
+  method: 'GET',
+  url: 'https://shop.example.kz/search?q=1',
+  parameterName: 'q',
+  endpointId: 'e1',
+  title: 'Reflected XSS in q',
+  triageStatus: 'OPEN',
+  createdAt: '2026-01-01T00:00:00Z',
+  ...over,
+})
+
+export const findingDetail = (over: Partial<FindingDetail> = {}): FindingDetail => ({
+  ...findingItem(),
+  jobId: 'j1',
+  fingerprint: 'abc',
+  parameterLocation: 'QUERY',
+  summary: 'Значение параметра q отражается без экранирования.',
+  recommendation: 'Экранируйте вывод.',
+  cwe: 'CWE-79',
+  details: { context: 'HTML_TEXT', payload: 'x' },
+  evidence: {
+    request: { method: 'GET', url: 'https://shop.example.kz/search?q=%3Cx%3E', headers: { Accept: '*/*' } },
+    response: { status: 200, bodyExcerpt: '<p>hello MARK world</p>', highlights: [{ start: 9, end: 13 }] },
+    observations: [{ key: 'reflected', value: 'true' }],
+  },
+  ...over,
+})
+
+export const summary = (over: Partial<DashboardSummary> = {}): DashboardSummary => ({
+  openFindingsBySeverity: { CRITICAL: 1, HIGH: 4, MEDIUM: 7, LOW: 2, INFO: 0 },
+  openFindingsByModule: { XSS: 8, SQLI: 4, IDOR: 2 },
+  openFindingsByVerdict: { CONFIRMED: 9, LIKELY: 3, SUSPECTED: 2 },
+  activeScans: 2,
+  recentScans: [{ id: 's1', targetId: 't1', status: 'COMPLETED', createdAt: '2026-01-01T00:00:00Z', finishedAt: '2026-01-01T00:01:00Z' }],
+  avgScanDurationSec: 95,
+  ...over,
+})
