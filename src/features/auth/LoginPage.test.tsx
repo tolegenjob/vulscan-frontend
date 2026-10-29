@@ -1,4 +1,4 @@
-import { screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { Route, Routes } from 'react-router-dom'
@@ -83,7 +83,7 @@ describe('LoginPage', () => {
     const button = screen.getByRole('button', { name: 'Войти' })
     await userEvent.click(button)
     await waitFor(() => expect(button).toBeDisabled())
-    await userEvent.click(button)
+    fireEvent.click(button)
     expect(await screen.findByText('home page')).toBeInTheDocument()
     expect(calls).toBe(1)
   })
