@@ -42,7 +42,7 @@ describe('FindingsPage', () => {
   it('lists findings with severity, verdict and links', async () => {
     setup()
     expect(await screen.findByRole('link', { name: 'Reflected XSS in q' })).toHaveAttribute('href', '/findings/f1')
-    expect(screen.getByText('GET https://shop.example.kz/search?q=1')).toBeInTheDocument()
+    expect(screen.getAllByText('GET https://shop.example.kz/search?q=1')).toHaveLength(2)
     expect(screen.getAllByText('Подтверждено').length).toBeGreaterThan(0)
     expect(screen.getByText('Критический')).toBeInTheDocument()
   })
