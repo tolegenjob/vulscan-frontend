@@ -4,6 +4,15 @@ import { API, server } from '../../tests/mocks/server'
 import { api } from './client'
 import { ApiError, isApiError } from './errors'
 
+async function failure(p: Promise<unknown>): Promise<ApiError> {
+  try {
+    await p
+  } catch (e) {
+    return e as ApiError
+  }
+  throw new Error('expected the request to fail')
+}
+
 describe('api client', () => {
   it('sends the CSRF header only on mutating methods', async () => {
     document.cookie = 'XSRF-TOKEN=csrf-123; path=/'
@@ -60,7 +69,7 @@ describe('api client', () => {
         ),
       ),
     )
-    const error = await api.post('/things', {}).catch((e) => e)
+    const error = await failure(api.post('/things', {}))
     expect(isApiError(error)).toBe(true)
     expect(error).toBeInstanceOf(ApiError)
     expect(error.status).toBe(400)
@@ -75,19 +84,19 @@ describe('api client', () => {
         HttpResponse.json({ code: 'RATE_LIMITED', message: 'Too many requests' }, { status: 429, headers: { 'Retry-After': '30' } }),
       ),
     )
-    const error = await api.get('/busy').catch((e) => e)
+    const error = await failure(api.get('/busy'))
     expect(error.retryAfterSec).toBe(30)
   })
 
   it('maps an unreachable server to NETWORK_ERROR', async () => {
     server.use(http.get(`${API}/down`, () => HttpResponse.error()))
-    const error = await api.get('/down').catch((e) => e)
+    const error = await failure(api.get('/down'))
     expect(error.code).toBe('NETWORK_ERROR')
   })
 
   it('handles non-JSON error bodies', async () => {
     server.use(http.get(`${API}/html`, () => new HttpResponse('<html>bad gateway</html>', { status: 502 })))
-    const error = await api.get('/html').catch((e) => e)
+    const error = await failure(api.get('/html'))
     expect(error.status).toBe(502)
     expect(error.code).toBe('HTTP_502')
   })
